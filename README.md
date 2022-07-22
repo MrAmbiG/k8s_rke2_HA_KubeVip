@@ -28,14 +28,17 @@ Perform all these tasks on all master nodes before anything else.
 
 # master1 setup
 *config.master1.yaml*
-```tls-san:
+```
+  tls-san:
   - node1
   - node1.amd.com
   - myk8s.amd.com
   - 10.1.1.4 # kube-vip
-disable: rke2-ingress-nginx```
+disable: rke2-ingress-nginx
+```
 
-```sudo su -
+```
+sudo su -
 mkdir -p /var/lib/rancher/rke2/server/manifests/
 export RKE2_VIP_IP=10.1.1.4 # IMPORTANT: Update this with the IP that you chose.
 export INTERFACE=eth1 # The name of the interface on all master nodes should be the same
@@ -44,32 +47,44 @@ export CONTAINER_RUNTIME_ENDPOINT=unix:///run/k3s/containerd/containerd.sock
 export CONTAINERD_ADDRESS=/run/k3s/containerd/containerd.sock
 export PATH=/var/lib/rancher/rke2/bin:$PATH
 export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
-alias kl=kubectl```
+alias kl=kubectl
+```
 
 # Install the kube-vip deployment into rke2's self-installing manifest folder
-```curl -s https://kube-vip.io/manifests/rbac.yaml > /var/lib/rancher/rke2/server/manifests/kube-vip-rbac.yaml
-curl -sL kube-vip.io/k3s |  vipAddress=${RKE2_VIP_IP} vipInterface=$INTERFACE sh | sudo tee vip.yaml```
+```
+curl -s https://kube-vip.io/manifests/rbac.yaml > /var/lib/rancher/rke2/server/manifests/kube-vip-rbac.yaml
+curl -sL kube-vip.io/k3s |  vipAddress=${RKE2_VIP_IP} vipInterface=$INTERFACE sh | sudo tee vip.yaml
+```
 
 #Find/Replace all k3s entries to represent rke2
-```sed -i 's/k3s/rke2/g' vip.yaml
-cp vip.yaml /var/lib/rancher/rke2/server/manifests/vip.yaml```
+```
+sed -i 's/k3s/rke2/g' vip.yaml
+cp vip.yaml /var/lib/rancher/rke2/server/manifests/vip.yaml
+```
 
 # create the rke2 config file
-```mkdir -p /etc/rancher/rke2
-cp config.master1.yaml /etc/rancher/rke2/config.yaml # copy the node's config.yaml file```
+```
+mkdir -p /etc/rancher/rke2
+cp config.master1.yaml /etc/rancher/rke2/config.yaml # copy the node's config.yaml file
+```
 
 # update path with rke2-binaries
-```echo 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml' >> ~/.bashrc ; echo 'export PATH=${PATH}:/var/lib/rancher/rke2/bin' >> ~/.bashrc ; echo 'alias kl=kubectl' >> ~/.bashrc ; source ~/.bashrc ;```
+```
+echo 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml' >> ~/.bashrc ; echo 'export PATH=${PATH}:/var/lib/rancher/rke2/bin' >> ~/.bashrc ; echo 'alias kl=kubectl' >> ~/.bashrc ; source ~/.bashrc ;
+```
 
 # install specific version of rke2
-```curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
+```
+curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-server.service
 systemctl start rke2-server.service
 sleep 90 #wait ~90 seconds for rke2 to be ready
-KUBECONFIG=/etc/rancher/rke2/rke2.yaml kubectl get nodes -o wide # this should work, if not, start over.```
+KUBECONFIG=/etc/rancher/rke2/rke2.yaml kubectl get nodes -o wide # this should work, if not, start over.
+```
 
 # test the api on kube-vip
-```mkdir -p $HOME/.kube
+```
+mkdir -p $HOME/.kube
 export RKE2_VIP_IP=devcloud-k8s.amd.com
 sudo cat /etc/rancher/rke2/rke2.yaml | sed 's/127.0.0.1/'$RKE2_VIP_IP'/g' > $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
@@ -78,52 +93,64 @@ KUBECONFIG=~/.kube/config kubectl get nodes -o wide # this should work, if not, 
 
 # master 2
 *master2 config file*
-```token: Kasdfasdfasfawerfawdfsdgwrfasrdfwerwefrsdfwerwefrserver:aswdfasdfasdfc # /var/lib/rancher/rke2/server/token from master1
+```
+token: Kasdfasdfasfawerfawdfsdgwrfasrdfwerwefrsdfwerwefrserver:aswdfasdfasdfc # /var/lib/rancher/rke2/server/token from master1
 server: https://10.1.1.4:9345
 tls-san:
   - node2
   - node2.ambi.com
   - myk8s.ambi.com
   - 10.1.1.4 # kube-vip
-disable: rke2-ingress-nginx```
+disable: rke2-ingress-nginx
+```
 
-```sudo su -
+```
+sudo su -
 mkdir -p /etc/rancher/rke2
 cp config.master2.yaml /etc/rancher/rke2/config.yaml
 curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-server.service
 systemctl start rke2-server.service
-sleep 90 #wait ~90 seconds for rke2 to be ready```
+sleep 90 #wait ~90 seconds for rke2 to be ready
+```
 
 # master 3
 *master3 config file*
-```token: Kasdfasdfasfawerfawdfsdgwrfasrdfwerwefrsdfwerwefrserver:aswdfasdfasdfc # /var/lib/rancher/rke2/server/token from master1
+```
+token: Kasdfasdfasfawerfawdfsdgwrfasrdfwerwefrsdfwerwefrserver:aswdfasdfasdfc # /var/lib/rancher/rke2/server/token from master1
 server: https://10.1.1.4:9345
 tls-san:
   - node3
   - node3.ambi.com
   - myk8s.ambi.com
   - 10.1.1.4 # kube-vip
-disable: rke2-ingress-nginx```
+disable: rke2-ingress-nginx
+```
 
-```sudo su -
+```
+sudo su -
 mkdir -p /etc/rancher/rke2
 cp config.master2.yaml /etc/rancher/rke2/config.yaml
 curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-server.service
 systemctl start rke2-server.service
-sleep 90 #wait ~90 seconds for rke2 to be ready```
+sleep 90 #wait ~90 seconds for rke2 to be ready
+```
 
 # worker nodes
 - follow the same for all worker nodes
 *worker1.config.yaml*
-```token: K101ad4d209b9d453c2de43a7aed07ca8cbf4b6effa4c13cfedc1c7b054c4c4729a::server:e20bdc7a1789d576a1334fee0d65df6b # /var/lib/rancher/rke2/server/token from master1
-server: https://10.1.1.4:9345```
+```
+token: K101ad4d209b9d453c2de43a7aed07ca8cbf4b6effa4c13cfedc1c7b054c4c4729a::server:e20bdc7a1789d576a1334fee0d65df6b # /var/lib/rancher/rke2/server/token from master1
+server: https://10.1.1.4:9345
+```
 
-```sudo su -
+```
+sudo su -
 cd /home/<useraccound> # user account is usually k8sprod or master, wherever you have copied the config.yaml
 mkdir -p /etc/rancher/rke2/
 cp config.yaml /etc/rancher/rke2/config.yaml # their respective config.yaml
 curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-agent.service
-systemctl start rke2-agent.service```
+systemctl start rke2-agent.service
+```
