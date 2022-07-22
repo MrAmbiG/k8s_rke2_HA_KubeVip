@@ -48,27 +48,23 @@ export CONTAINERD_ADDRESS=/run/k3s/containerd/containerd.sock
 export PATH=/var/lib/rancher/rke2/bin:$PATH
 export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
 alias kl=kubectl
-```
+
 
 # Install the kube-vip deployment into rke2's self-installing manifest folder
-```
 curl -s https://kube-vip.io/manifests/rbac.yaml > /var/lib/rancher/rke2/server/manifests/kube-vip-rbac.yaml
 curl -sL kube-vip.io/k3s |  vipAddress=${RKE2_VIP_IP} vipInterface=$INTERFACE sh | sudo tee vip.yaml
-```
+
 
 #Find/Replace all k3s entries to represent rke2
-```
 sed -i 's/k3s/rke2/g' vip.yaml
 cp vip.yaml /var/lib/rancher/rke2/server/manifests/vip.yaml
-```
 
 # create the rke2 config file
-```
 mkdir -p /etc/rancher/rke2
 cp config.master1.yaml /etc/rancher/rke2/config.yaml # copy the node's config.yaml file
 ```
 
-# update path with rke2-binaries
+### update path with rke2-binaries
 ```
 echo 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml' >> ~/.bashrc ; echo 'export PATH=${PATH}:/var/lib/rancher/rke2/bin' >> ~/.bashrc ; echo 'alias kl=kubectl' >> ~/.bashrc ; source ~/.bashrc ;
 ```
