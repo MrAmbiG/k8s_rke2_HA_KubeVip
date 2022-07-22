@@ -12,11 +12,12 @@ Sample implementation of k8s with rke2, HA with floating ip from kube-vip
 - /etc/hostname should reflect the full name
 - set `preserve_hostname: true` at /etc/cloud/cloud.cfg. `sed -i 's/preserve_hostname: false/preserve_hostname: true/g' /etc/cloud/cloud.cfg`
 
-*sample /etc/hosts file entries* if DNS is not used for FQDN
-10.1.1.1 node1.ambi.com node1 # master1
-10.1.1.2 node2.ambi.com node2 # master2
-10.1.1.3 node3.ambi.com node3 # master3
-10.1.1.4 myk8s.ambi.com myk8s # k8s master api - kube-vip
+*sample /etc/hosts file entries* if DNS is not used for FQDN <br>
+10.1.1.1 node1.ambi.com node1 # master1 <br>
+10.1.1.2 node2.ambi.com node2 # master2 <br>
+10.1.1.3 node3.ambi.com node3 # master3 <br>
+10.1.1.4 myk8s.ambi.com myk8s # k8s master api - kube-vip <br>
+<br>
 
 # common tasks on all master nodes
 Perform all these tasks on all master nodes before anything else.
