@@ -55,7 +55,7 @@ curl -s https://kube-vip.io/manifests/rbac.yaml > /var/lib/rancher/rke2/server/m
 curl -sL kube-vip.io/k3s |  vipAddress=${RKE2_VIP_IP} vipInterface=$INTERFACE sh | sudo tee vip.yaml
 
 
-#Find/Replace all k3s entries to represent rke2
+# Find/Replace all k3s entries to represent rke2
 sed -i 's/k3s/rke2/g' vip.yaml
 cp vip.yaml /var/lib/rancher/rke2/server/manifests/vip.yaml
 
@@ -69,7 +69,7 @@ cp config.master1.yaml /etc/rancher/rke2/config.yaml # copy the node's config.ya
 echo 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml' >> ~/.bashrc ; echo 'export PATH=${PATH}:/var/lib/rancher/rke2/bin' >> ~/.bashrc ; echo 'alias kl=kubectl' >> ~/.bashrc ; source ~/.bashrc ;
 ```
 
-# install specific version of rke2
+### install specific version of rke2
 ```
 curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-server.service
@@ -78,7 +78,7 @@ sleep 90 #wait ~90 seconds for rke2 to be ready
 KUBECONFIG=/etc/rancher/rke2/rke2.yaml kubectl get nodes -o wide # this should work, if not, start over.
 ```
 
-# test the api on kube-vip
+### test the api on kube-vip
 ```
 mkdir -p $HOME/.kube
 export RKE2_VIP_IP=devcloud-k8s.amd.com
