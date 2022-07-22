@@ -29,7 +29,7 @@ Perform all these tasks on all master nodes before anything else.
 # master1 setup
 *config.master1.yaml*
 ```
-  tls-san:
+tls-san:
   - node1
   - node1.amd.com
   - myk8s.amd.com
