@@ -26,6 +26,21 @@ Perform all these tasks on all master nodes before anything else.
 3. mkdir -p /etc/rancher/rke2
 4. ensure the names of the primary network interface of the master nodes is the same. it cannot eth0 on master1 and eth1 or eno1 on master2 or master3
 
+# private insecure registry
+_Be careful with the registries.yaml file. The official documentation as of today july2022 is misleading. If you want your private insecure registry to work, then mimic the file below_
+```
+# registries.yaml    
+mirrors:
+  "my-artifactory.company.com:5000":
+    endpoint:
+      - "http://my-artifactory.company.com:5000"
+configs:
+  "my-artifactory.company.com:5000":
+    auth:
+      username: xxxxxxxxx # this is the registry username
+      password: yyyyyyyyy # this is the registry
+```
+
 # master1 setup
 *config.master1.yaml*
 ```
@@ -62,6 +77,7 @@ cp vip.yaml /var/lib/rancher/rke2/server/manifests/vip.yaml
 # create the rke2 config file
 mkdir -p /etc/rancher/rke2
 cp config.master1.yaml /etc/rancher/rke2/config.yaml # copy the node's config.yaml file
+cp registries.yaml /etc/rancher/rke2/ # copy registry file
 ```
 
 ### update path with rke2-binaries
@@ -104,6 +120,7 @@ disable: rke2-ingress-nginx
 sudo su -
 mkdir -p /etc/rancher/rke2
 cp config.master2.yaml /etc/rancher/rke2/config.yaml
+cp registries.yaml /etc/rancher/rke2/ # copy registry file
 curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-server.service
 systemctl start rke2-server.service
@@ -127,6 +144,7 @@ disable: rke2-ingress-nginx
 sudo su -
 mkdir -p /etc/rancher/rke2
 cp config.master2.yaml /etc/rancher/rke2/config.yaml
+cp registries.yaml /etc/rancher/rke2/ # copy registry file
 curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-server.service
 systemctl start rke2-server.service
@@ -146,6 +164,7 @@ sudo su -
 cd /home/<useraccound> # user account is usually k8sprod or master, wherever you have copied the config.yaml
 mkdir -p /etc/rancher/rke2/
 cp config.yaml /etc/rancher/rke2/config.yaml # their respective config.yaml
+cp registries.yaml /etc/rancher/rke2/ # copy registry file
 curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-agent.service
 systemctl start rke2-agent.service
