@@ -6,6 +6,13 @@ Sample implementation of k8s with rke2, HA with floating ip from kube-vip
 - same floating ip is used to communicate with the k8s cluster
 - Install nfs-client (nfs-common) on all nodes if using NFS storage
 
+### common tasks on all nodes
+Perform all these tasks on all master nodes before anything else.
+1. `sudo su -` # switch to root user
+2. `cd /home/<useraccount>` # user account is usually k8sprod or master, wherever you have copied the config.yaml
+3. `apt-get remove docker docker-engine docker.io containerd runc -y` # remove all docker, containerd
+4. `echo 'export CONTAINER_RUNTIME_ENDPOINT=unix:///run/k3s/containerd/containerd.sock' >> ~/.bashrc ; echo 'export CONTAINERD_ADDRESS=/run/k3s/containerd/containerd.sock' >> ~/.bashrc ; echo 'export PATH=${PATH}:/var/lib/rancher/rke2/bin' >> ~/.bashrc ; echo 'alias kl=kubectl' >> ~/.bashrc ; source ~/.bashrc ;`
+
 # FQDN
 - sudo hostnamectl set-hostname <name>
 - /etc/hosts should reflect all master nodes including kube-vip name if FQDN is not implemented via DNS. 
