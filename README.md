@@ -53,8 +53,8 @@ configs:
 ```
 tls-san:
   - node1
-  - node1.amd.com
-  - myk8s.amd.com
+  - node1.ambi.com
+  - myk8s.ambi.com
   - 10.1.1.4 # kube-vip
 disable: rke2-ingress-nginx
 ```
@@ -104,7 +104,7 @@ KUBECONFIG=/etc/rancher/rke2/rke2.yaml kubectl get nodes -o wide # this should w
 ### test the api on kube-vip
 ```
 mkdir -p $HOME/.kube
-export RKE2_VIP_IP=devcloud-k8s.amd.com
+export RKE2_VIP_IP=mycloud-k8s.ambi.com
 sudo cat /etc/rancher/rke2/rke2.yaml | sed 's/127.0.0.1/'$RKE2_VIP_IP'/g' > $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 KUBECONFIG=~/.kube/config kubectl get nodes -o wide # this should work, if not, start over.
