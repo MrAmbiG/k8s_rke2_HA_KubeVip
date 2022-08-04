@@ -7,7 +7,7 @@ Sample implementation of k8s with rke2, HA with floating ip from kube-vip
 - Install nfs-client (nfs-common) on all nodes if using NFS storage
 
 ### common tasks on all nodes
-Perform all these tasks on all master nodes before anything else.
+Perform all these tasks on all nodes before anything else.
 1. `sudo su -` # switch to root user
 2. `cd /home/<useraccount>` # user account is usually k8sprod or master, wherever you have copied the config.yaml
 3. `apt-get remove docker docker-engine docker.io containerd runc -y` # remove all docker, containerd
