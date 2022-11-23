@@ -9,7 +9,7 @@ Sample implementation of k8s with rke2, HA with floating ip from kube-vip
 ### common tasks on all nodes
 Perform all these tasks on all nodes before anything else.
 1. `sudo su -` # switch to root user
-2. `cd /home/<useraccount>` # user account is usually k8sprod or master, wherever you have copied the config.yaml
+2. `cd /home/<useraccount>` # user account is usually root or master, wherever you have copied the config.yaml
 3. `apt-get remove docker docker-engine docker.io containerd runc -y` # remove all docker, containerd
 4. `echo 'export CONTAINER_RUNTIME_ENDPOINT=unix:///run/k3s/containerd/containerd.sock' >> ~/.bashrc ; echo 'export CONTAINERD_ADDRESS=/run/k3s/containerd/containerd.sock' >> ~/.bashrc ; echo 'export PATH=${PATH}:/var/lib/rancher/rke2/bin' >> ~/.bashrc ; echo 'alias kl=kubectl' >> ~/.bashrc ; source ~/.bashrc ;`
 
@@ -29,7 +29,7 @@ Perform all these tasks on all nodes before anything else.
 # common tasks on all master nodes
 Perform all these tasks on all master nodes before anything else.
 1. sudo su - # switch to root user
-2. cd /home/<useraccound> # user account is usually k8sprod or master, wherever you have copied the config.yaml
+2. cd /home/<useraccound> # user account is usually root or master, wherever you have copied the config.yaml
 3. mkdir -p /etc/rancher/rke2
 4. ensure the names of the primary network interface of the master nodes is the same. it cannot eth0 on master1 and eth1 or eno1 on master2 or master3
 
@@ -168,7 +168,7 @@ server: https://10.1.1.4:9345
 
 ```
 sudo su -
-cd /home/<useraccound> # user account is usually k8sprod or master, wherever you have copied the config.yaml
+cd /home/<useraccound> # user account is usually root or master, wherever you have copied the config.yaml
 mkdir -p /etc/rancher/rke2/
 cp config.yaml /etc/rancher/rke2/config.yaml # their respective config.yaml
 cp registries.yaml /etc/rancher/rke2/ # copy registry file
