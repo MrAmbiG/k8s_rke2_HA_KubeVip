@@ -6,6 +6,8 @@ Sample implementation of k8s with rke2, HA with floating ip from kube-vip
 - same floating ip is used to communicate with the k8s cluster
 - Install nfs-client (nfs-common) on all nodes if using NFS storage
 
+Note: *choose an rke2 k8s version from https://github.com/rancher/rke2/releases and set it to INSTALL_RKE2_VERSION accordingly. In this example it shall be INSTALL_RKE2_VERSION*
+
 ### common tasks on all nodes
 Perform all these tasks on all nodes before anything else.
 1. `sudo su -` # switch to root user
@@ -93,6 +95,7 @@ echo 'export KUBECONFIG=/etc/rancher/rke2/rke2.yaml' >> ~/.bashrc ; echo 'export
 ```
 
 ### install specific version of rke2
+*choose your version here https://github.com/rancher/rke2/releases and set it to INSTALL_RKE2_VERSION*
 ```
 curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION=v1.21.14+rke2r1 sh -
 systemctl enable rke2-server.service
